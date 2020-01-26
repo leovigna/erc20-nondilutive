@@ -1,0 +1,24 @@
+{
+    "name": "erc20-nondilutive",
+    "version": "1.0.0",
+    "description": "Use ERC20 + ERC721 to create non-dilutive shares with a mintable token.",
+    "dependencies": {
+        "@openzeppelin/contracts-ethereum-package": "^2.4.0",
+        "@openzeppelin/upgrades": "^2.6.0",
+        "@truffle/hdwallet-provider": "^1.0.28",
+        "dotenv": "^8.2.0",
+        "web3": "^1.2.4"
+    },
+    "devDependencies": {
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/leovigna/erc20-nondilutive.git"
+    },
+    "bugs": {
+        "url": "https://github.com/leovigna/erc20-nondilutive/issues"
+    },
+    "homepage": "https://github.com/leovigna/erc20-nondilutive#readme",
+    "author": "Leo Vigna <leo.vigna@gmail.com>",
+    "license": "MIT"
+}
