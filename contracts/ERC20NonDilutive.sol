@@ -7,13 +7,14 @@ import "./ERC721PreferredStock.sol";
 contract ERC20NonDilutive is ERC20Mintable {
 
     uint256 public commonStockSupply;
-    uint256 public preferredStockSupply; //TBD burning reduce supply causing index misalignment?
     ERC721PreferredStock preferredStock;
 
     uint256 public authorizedPerShare;
-    uint256 public totalClaimed;
     uint256 public totalClaimable;
     mapping (uint256 => uint256) claimed;
+
+    uint256 public totalClaimed;
+
 
     event PreferredStockClaim(uint256 indexed tokenId, uint256 amount);
 
@@ -21,7 +22,7 @@ contract ERC20NonDilutive is ERC20Mintable {
         // Supply is 0
         ERC20Mintable.initialize(_msgSender());
         // Initialize preffered stock contract
-        preferredStock = new ERC721PrefferedStock();
+        preferredStock = new ERC721PreferredStock();
         preferredStock.initialize(address(this));
 
         authorizedPerShare = 0;
@@ -91,6 +92,19 @@ contract ERC20NonDilutive is ERC20Mintable {
     }
 
     function burnPrefferedStock(uint256[] calldata tokenIds) external returns (bool) {
+        return _burnPrefferedStock(tokenIds);
+    }
+    function burnPrefferedStockByIndex(uint256[] calldata tokenIndexes) external returns (bool) {
+        uint256[] memory tokenIds = new uint256[](tokenIndexes.length);
+
+        for (uint256 i = 0; i < tokenIndexes.length; i++) {
+            tokenIds[i] = preferredStock.tokenByIndex(tokenIndexes[i]);
+        }
+
+        return _burnPrefferedStock(tokenIds);
+    }
+
+    function _burnPrefferedStock(uint256[] memory tokenIds) internal returns (bool) {
         address sender = _msgSender();
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 tokenId = tokenIds[i];
@@ -99,6 +113,7 @@ contract ERC20NonDilutive is ERC20Mintable {
             require(claimed[tokenId] == authorizedPerShare, "Must claim all tokens");
 
             delete(claimed[tokenId]);
+            // deleting ERC721 token misaligns ERC721 supply and max token id
             preferredStock.burn(tokenId);
         }
 
@@ -115,11 +130,6 @@ contract ERC20NonDilutive is ERC20Mintable {
         return commonStockSupply;
     }
 
-    function claimByIndex(uint256 tokenIndex) public returns (bool) {
-        uint256 tokenId = preferredStock.tokenByIndex(tokenIndex);
-        return _claimById(tokenId);
-    }
-
     function claimByIndex(uint256[] calldata tokenIndexes) external returns (bool) {
         for (uint256 i = 0; i < tokenIndexes.length; i++) {
             uint256 tokenId = preferredStock.tokenByIndex(tokenIndexes[i]);
@@ -127,10 +137,6 @@ contract ERC20NonDilutive is ERC20Mintable {
         }
 
         return true;
-    }
-
-    function claimById(uint256 tokenId) public returns (bool) {
-        return _claimById(tokenId);
     }
 
     function claimById(uint256[] calldata tokenIds) external returns (bool) {
