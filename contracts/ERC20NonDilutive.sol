@@ -7,6 +7,7 @@ import "./ERC721PreferredStock.sol";
 contract ERC20NonDilutive is ERC20Mintable {
 
     uint256 public commonStockSupply;
+    uint256 public preferredStockSupply; //TBD burning reduce supply causing index misalignment?
     ERC721PreferredStock preferredStock;
 
     uint256 public authorizedPerShare;
