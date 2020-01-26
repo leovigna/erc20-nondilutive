@@ -6,16 +6,27 @@ import "./ERC721PreferredStock.sol";
 
 contract ERC20NonDilutive is ERC20Mintable {
 
+    // Virtual "common stock", has no ownership
+    // serves to compute ownership of protected stock
     uint256 public commonStockSupply;
-    ERC721PreferredStock preferredStock;
+    ERC721PreferredStock preferredStock; //ERC721 inflation-protection preferred stock
+    // Used to keep track of mint tokenId since burning
+    // makes supply unreliable for usage as min tokenId
+    uint256 public preferredStockMaxId;
 
+    // Authorized claim per preferred share
     uint256 public authorizedPerShare;
+    // Total claimed
+    // (not equal to preferredStock * authorizedPerShare since preferredStock can be minted)
+    uint256 public totalClaimed;
+    // Total minted claimable
     uint256 public totalClaimable;
+    // Claimed tokens by share. New shares are minted as having
+    //    claimed[tokenId] = authorizedPerShare
+    // such as to allow only future inflation protection
     mapping (uint256 => uint256) claimed;
 
-    uint256 public totalClaimed;
-
-
+    // Emits event when preferredStock holder claims tokens
     event PreferredStockClaim(uint256 indexed tokenId, uint256 amount);
 
     function initialize() public initializer {
@@ -29,6 +40,7 @@ contract ERC20NonDilutive is ERC20Mintable {
         commonStockSupply = 0;
         totalClaimed = 0;
         totalClaimable = 0;
+        preferredStockMaxId = 0;
     }
 
     function preferredStockSupply() public view returns (uint256) {
@@ -80,15 +92,17 @@ contract ERC20NonDilutive is ERC20Mintable {
    * @param account Address to mint to
    * @param amount Amount of ERC-721 tokens to mint
    */
-    function mintPrefferedStock(address account, uint256 amount) public onlyMinter returns (uint256) {
-        uint256 preferredSupply = _preferredStockSupply();
-
-        for (uint256 tokenId = preferredSupply; tokenId < preferredSupply.add(amount); tokenId++) {
+    function mintPrefferedStock(address account, uint256 amount) public onlyMinter returns (bool) {
+        uint256 preferredStockEndId = preferredStockMaxId.add(amount);
+        for (uint256 tokenId = preferredStockMaxId; tokenId < preferredStockEndId; tokenId++) {
             preferredStock.mint(account, tokenId);
             claimed[tokenId] = authorizedPerShare; //Only right to future inflation.
         }
 
-        return _preferredStockSupply();
+        // Update min id for future minting
+        preferredStockMaxId = preferredStockEndId;
+
+        return true;
     }
 
     function burnPrefferedStock(uint256[] calldata tokenIds) external returns (bool) {
@@ -110,10 +124,10 @@ contract ERC20NonDilutive is ERC20Mintable {
             uint256 tokenId = tokenIds[i];
             address tokenOwner = preferredStock.ownerOf(tokenId);
             require(sender == tokenOwner, "Sender does not own preferred share.");
-            require(claimed[tokenId] == authorizedPerShare, "Must claim all tokens");
+            require(claimed[tokenId] == authorizedPerShare, "Must claim all tokens before burn");
 
-            delete(claimed[tokenId]);
-            // deleting ERC721 token misaligns ERC721 supply and max token id
+            delete(claimed[tokenId]); // No longer needed to keep track of claim
+            // deleting ERC721 token reduces its supply, does not impact max token id
             preferredStock.burn(tokenId);
         }
 
