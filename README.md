@@ -44,18 +44,18 @@ Summary Phase 1:
 - Inflation Protection: 33 common, 66 preferred
 
 #### Phase 2
-After some development and a succesful beta launch, Clash of Tribes is ready to expand its user base to 100,000 users. At this point, the token minting is automated dynamically based on the games components. On average, user signup unlocks 100 CST, achievements unlock 400 CST, and a village cumulatively produces 500 CST. Assuming tokens are minted only for user onboarding, a total of 100M CST will have to have been minted. Founders and investors are still inflation protected however, so issuing an additional 99M for subsidy will also mint tokens for those parties.
+After some development and a succesful beta launch, Clash of Tribes is ready to expand its user base to 100,000 users. At this point, the token minting is automated dynamically based on the game's components. On average, user signup unlocks 100 CST, achievements unlock 400 CST, and a village cumulatively produces 500 CST. Assuming tokens are minted only for user onboarding, a total of 100M CST will have to have been minted. Founders and investors are still inflation protected however, so issuing an additional 99M for subsidy will also mint tokens for those parties.
 
 Summary Phase 2:
 - Token: 300 million CST (100m subsidy, 100m founders, 100m investors)
 - Inflation Protection: 33 common, 66 preferred
 
 #### Phase 3
-Investors and founders have sold off some of their tokens on the open market. Most sold tokens are simply used by users in the DApp. They now collectively only own 60 million of the 300 million supply (20%). They therefore decide that they only need 20% inflation protection to maintain their stake. Burning 3 common stock and 60 preferred NFTs enables such a ratio.
+Investors and founders have sold off some of their tokens on the open market. Most sold tokens are simply used by users in the DApp. They now collectively only own 60 million of the 300 million supply (20%). They therefore decide that they only need 20% inflation protection to maintain their stake. Burning 9 common stock and 60 preferred NFTs enables such a ratio.
 
 Summary Phase 3:
 - Token: 300 million CST (240m market, 30m founders, 30m investors)
-- Inflation Protection: 30 common, 6 preferred
+- Inflation Protection: 24 common, 6 preferred
 
 
 
