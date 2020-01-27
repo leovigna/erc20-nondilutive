@@ -60,7 +60,7 @@ Summary Phase 3:
 
 
 #### Dynamic Token Minting
-In this short example, we present a very simplified minting schedule with only 3 phases. The real power of this model comes from its flexibility. One could imagine 10s if not 100s of phases of perpetual token minting. In fact, provided Clash of Tribes keeps onboarding new users, it would be a good strategy to keep increasing user onboarding funds as needed. This perpetual token minting could come at the cost of nominal token value for users (if an incremental user is worth less than 1000 CST), but investors remain protected regardless of this.
+In this short example, we present a very simplified minting schedule with only 3 phases. The real power of this model comes from its flexibility. One could imagine 10s if not 100s of phases of perpetual token minting. In fact, provided Clash of Tribes keeps onboarding new users, it would be a good strategy to keep increasing user onboarding funds as needed. This perpetual token minting could come at the cost of nominal token value for users (if an incremental user is worth less than CST inflation), but investors remain protected regardless of this.
 
 Inflation protected holders do not care about the value of 1 token but rather about the aggregate network value that is reflected through the total market cap of the token. This is because their share of the total token supply remains unchanged regardless of nominal token supply (unless if they sell). If the token reaches a final supply cap, inflation protection no longer has any value, but while a subsidy is needed, it guarantees that value holders maintain their proportional share.   
 
