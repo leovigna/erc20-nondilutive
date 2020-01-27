@@ -7,12 +7,69 @@ Enable using a mintable token along with dilution protected preferred shares.
 ## Description
 This project provides a proof of concept of a mintable ERC20 token that offers the possibility of inflation protection through the issuance of ERC721 "preferred shares". These shares are also tradeable but non-fungible (due to the need to track individual claims by tokenId). Whenever tokens are minted, holders of "preferred shares" are offered an additional claim on tokens such as to maintain the proportion of tokens they hold. This enables the usage of 1 token that can be inflated dynamically to incentivize new user onboarding while offering a form of dilution protection for investors.
 
-## Economics
+The rest of this repo is split apart into the following sections.
+- Example DApp Issuance: Clash of Tribes
+- Token Issuance Economics
+- Contracts: Technical Overview
+- Regulatory Advantages
+
+## Example DApp Issuance: Clash of Tribes
+### The Concept
+Clash of Tribes is a DApp in which users build there crypto village and compete in fighting battles and gathering resources. The in-game currency are ERC-20 tribal crystals (CST). Crystals can be earned by playing the game: improving your village, PvP raids, and completing achievements. In-the case of village production and achievements, new crystals are minted periodically as players progress. Crystals can also be purchased through the in-game store or freely traded peer-to-peer.
+
+Initial users do not wish to purchase any crystals. In fact, many users play the game without ever purchasing any. It's often more dedicated users, who reach Tribal Hall level 6 and above, who end up purchasing and spending more crystals to speed up their village's development. The Clash of Tribes developers estimate that it costs around **1000 CST** to on-board a new user to the point where they are self-sufficient and can enjoy the game's mechanics. Beyond that point, users more or less break-even on average (they spend as many CST as they create) and only competitive players who continually invest in buying more CST can truly upgrade their Tribal Hall.
+
+### Investing in the crypto village economy
+The Clash of Tribes developer team is looking to raise funding through an initial private sales of tokens. While investors love the gaming concept, their main concern is that if they invest in CST tokens, adoption of Clash of Tribes by users might actually hurt their investment. Indeed new users translate in additional token expenditure which increase the token supply and dilute investors' share. 
+
+One proposed solution is to simply set a fixed supply, and dedicate some funds for a user on-boarding subsidy. 1 billion CST will be issued split 33/33/33 between founders, investors, and new user onboarding fund. The developers believe this is not the best solution as they do not know if 333M CST will be enough (or too much) for jumpstarting the Clash of Tribes economy. They do not know how many and how quickly their DApp will attract users. Furthermore once the on-boarding fund is fully spent, how will Clash of Tribes on-board new users? With an estimate of 1000 CST per-user, 333M CST would imply a cap of 333k users on-boarded. The reality could be way more or less. Is the 1000 CST estimate even accurate?
+
+### ERC20NonDilutive Issuance Phases
+#### Phase 0
+The developers therefore propose using an ERC20NonDilutive scheme. CST will be split 33/33/33 between founders, investors, and users. However, the unknown here is the "users" component. The founders set the initial CST supply to 0. Furthermore they set the common share to 33, and issue 66 preferred share ERC721 NFTs (33 to founders, 33 to investors). These NFTs are not tokens and have no use cases beyond guaranteeing dilution protection for their holders. That is, founders will always be given 33/99 of the token supply (investors as well).
+
+Summary Phase 0:
+- Token: 0 CST
+- Inflation Protection: 33 common, 66 preferred
+
+#### Phase 1
+Finally the token minting can begin. For the early beta, founders decide to only mint 1 million CST. At the 1000 CST/user estimate, this can only onboard 1000 users. This is enough for a small beta community but they will have to issue more in the long-term. Since founders and investors hold inflation protection, additional tokens are also minted.
+- 1 million minted with 33 common -> 30303 / share
+- -> 2 million minted for 66 preferred
+
+When requesting to mint 1 million tokens, these tokens are minted for the "common" pool. Inflation protection holders also need tokens to maintain their ratio. In this case for example, 2 million is minted for the preferred pool. The investors therefore have gotten  tokens for their investment. Note that in a private sale scenario, Phase 0 and Phase 1 would likely be back to back instantly. We just separate the two here for clarity.
+
+Summary Phase 1:
+- Token: 3 million CST (1m subsidy, 1m founders, 1m investors)
+- Inflation Protection: 33 common, 66 preferred
+
+#### Phase 2
+After some development and a succesful beta launch, Clash of Tribes is ready to expand its user base to 100,000 users. At this point, the token minting is automated dynamically based on the games components. On average, user signup unlocks 100 CST, achievements unlock 400 CST, and a village cumulatively produces 500 CST. Assuming tokens are minted only for user onboarding, a total of 100M CST will have to have been minted. Founders and investors are still inflation protected however, so issuing an additional 99M for subsidy will also mint tokens for those parties.
+
+Summary Phase 2:
+- Token: 300 million CST (100m subsidy, 100m founders, 100m investors)
+- Inflation Protection: 33 common, 66 preferred
+
+#### Phase 3
+Investors and founders have sold off some of their tokens on the open market. Most sold tokens are simply used by users in the DApp. They now collectively only own 60 million of the 300 million supply (20%). They therefore decide that they only need 20% inflation protection to maintain their stake. Burning 3 common stock and 60 preferred NFTs enables such a ratio.
+
+Summary Phase 3:
+- Token: 300 million CST (240m market, 30m founders, 30m investors)
+- Inflation Protection: 30 common, 6 preferred
+
+
+
+#### Dynamic Token Minting
+In this short example, we present a very simplified minting schedule with only 3 phases. The real power of this model comes from its flexibility. One could imagine 10s if not 100s of phases of perpetual token minting. In fact, provided Clash of Tribes keeps onboarding new users, it would be a good strategy to keep increasing user onboarding funds as needed. This perpetual token minting could come at the cost of nominal token value for users (if an incremental user is worth less than 1000 CST), but investors remain protected regardless of this.
+
+Inflation protected holders do not care about the value of 1 token but rather about the aggregate network value that is reflected through the total market cap of the token. This is because their share of the total token supply remains unchanged regardless of nominal token supply (unless if they sell). If the token reaches a final supply cap, inflation protection no longer has any value, but while a subsidy is needed, it guarantees that value holders maintain their proportional share.   
+
+## Token Issuance Economics
 ### Financing with Programmable Money
 Various token distribution models have been experimented with in the past few years. The programmability of tokens offer the opportunity to innovate on different forms of financing. Through the flourishing of different crypto distribution models, entrepreneurs, users, and investors are able to test out different forms of token distribution models which each create different incentive alignment paradigms. 
 
 ### Inflation vs Hoarding
-One simple characteristic we can use to distinguish tokens is inflation. The most extreme examples on each side of this metric would be a fully inflationary mintable token, and a fixed supply fully liquid token. Both have their respective advantages and disadvantages. While inflation can help bootstrap a community and incentivize the onboarding of new users, it can also severely hurt token holders who hold the asset as an investment. The opposite case of a fixed supply with no inflation, while very conservative for investors, can also have an adverse affect to tokens looking to bootstrap a community of new users who are just looking to use the token and plan on spending it on the short-term. 
+One simple characteristic we can use to distinguish tokens is inflation. The most extreme examples on each side of this metric would be a fully inflationary mintable token, and a fixed supply fully liquid token. Both have their respective advantages and disadvantages. While inflation can help bootstrap a community and incentivize the onboarding of new users, it can also severely hurt token holders who hold the asset as an investment. The opposite case of a fixed supply with no inflation, while very conservative for investors, can also have an adverse effect on tokens looking to bootstrap a community of new users who are just looking to use the token and plan on spending it in the short-term. 
 
 Gresham's law of "bad money drives out good" can lead to hoarding and adversely impact newcomers. While some may say that early investors should be compensated for their risks and latecomers should pay a premium, the reality is that often this can hurt adoption and any potential of creating a network of users. This of course, is one of the common criticisms of bitcoin's strict supply, and while this may suit its usage as sound money or "digital gold", it is clear that for certain use cases, inflation is a good tool to incentivise DApp usage and leverage network effects.
 

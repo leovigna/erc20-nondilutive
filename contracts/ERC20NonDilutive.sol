@@ -80,6 +80,8 @@ contract ERC20NonDilutive is ERC20Mintable {
         authorizedPerShare = authorizedPerShare.add(mintPerShare);
         // Mint preferred stock tokens
         uint256 mintPreffered = mintPerShare.mul(preferredSupply);
+        // Tokens are held on the contracts balance
+        // Loss of the ERC721 token holder will permanently lock that claim
         _mint(address(this), mintPreffered);
         totalClaimable = totalClaimable.add(mintPreffered);
 
