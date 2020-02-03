@@ -72,7 +72,7 @@ contract ERC20NonDilutive is ERC20Mintable {
 
         uint256 mintPerShare = amount.div(commonStockSupply);
         // Reverse operation to avoid rounding errors and the creation of dust
-        uint256 mintCommon = amount.mul(commonStockSupply);
+        uint256 mintCommon = mintPerShare.mul(commonStockSupply);
 
         // Mint common stock tokens
         _mint(account, mintCommon);
